@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	user "github.com/Albert-tru/ecom/service"
+	userstore "github.com/Albert-tru/ecom/service/user"
 	"github.com/gorilla/mux"
 )
 
@@ -27,7 +28,8 @@ func (s *APIServer) Run() error {
 	router := mux.NewRouter()
 	subrouter := router.PathPrefix("/api/v1").Subrouter()
 
-	userHandler := user.NewHandler()
+	userStore := userstore.NewStore(s.db)
+	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subrouter)
 
 	log.Println("listening on", s.addr)
