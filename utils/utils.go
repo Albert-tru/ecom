@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
+
+var Validate = validator.New()
 
 // 解析从前端发送过来的http请求的json数据
 func ParseJson(r *http.Request, payload any) error {

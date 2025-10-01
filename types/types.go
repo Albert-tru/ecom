@@ -3,19 +3,19 @@ package types
 import "time"
 
 type UserStore interface {
-	GetUsersByEmail(email string) (*User, error)
-	GetUsersByID(id int) (*User, error)
+	GetUserByEmail(email string) (*User, error)
+	GetUserByID(id int) (*User, error)
 	CreateUser(u *User) error
 }
 
 type mockUserStore struct {
 }
 
-func GetUsersByEmail(email string) (*User, error) {
+func GetUserByEmail(email string) (*User, error) {
 	return nil, nil
 }
 
-func GetUsersByID(id int) (*User, error) {
+func GetUserByID(id int) (*User, error) {
 	return nil, nil
 }
 
@@ -33,8 +33,8 @@ type User struct {
 }
 
 type RegisterUserPayload struct {
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+	Firstname string `json:"firstname" validate:"required"`
+	Lastname  string `json:"lastname" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
+	Password  string `json:"password" validate:"required,min=6"`
 }
