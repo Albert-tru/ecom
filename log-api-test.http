@@ -1,0 +1,82 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### 1. 测试用户注册 - 有效数据
+POST {{baseUrl}}/api/v1/register
+Content-Type: {{contentType}}
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john.doe@example.com",
+  "password": "123456"
+}
+
+### 2. 测试用户注册 - 无效数据（空字段）
+POST {{baseUrl}}/api/v1/register
+Content-Type: {{contentType}}
+
+{
+  "firstname": "",
+  "lastname": "",
+  "email": "invalid-email",
+  "password": "123"
+}
+
+### 3. 测试用户注册 - 重复邮箱
+POST {{baseUrl}}/api/v1/register  
+Content-Type: {{contentType}}
+
+{
+  "firstname": "Jane",
+  "lastname": "Smith",
+  "email": "john.doe@example.com",
+  "password": "654321"
+}
+
+### 4. 测试用户登录 - 正确凭据
+POST {{baseUrl}}/api/v1/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "123456"
+}
+
+### 5. 测试用户登录 - 错误密码
+POST {{baseUrl}}/api/v1/login
+Content-Type: {{contentType}}
+
+{
+  "email": "john.doe@example.com",
+  "password": "wrongpassword"
+}
+
+### 6. 测试用户登录 - 不存在的用户
+POST {{baseUrl}}/api/v1/login
+Content-Type: {{contentType}}
+
+{
+  "email": "notexist@example.com",
+  "password": "anypassword"
+}
+
+### 7. 测试无效 JSON 格式
+POST {{baseUrl}}/api/v1/register
+Content-Type: {{contentType}}
+
+{
+  "firstname": "Test"
+  "lastname": "User"  // 故意缺少逗号
+  "email": "test@example.com"
+}
+
+### 8. 测试缺少 Content-Type
+POST {{baseUrl}}/api/v1/register
+
+{
+  "firstname": "Test",
+  "lastname": "User",
+  "email": "test2@example.com",
+  "password": "123456"
+}
