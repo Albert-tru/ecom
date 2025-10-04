@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Albert-tru/ecom/service/product"
 	"github.com/Albert-tru/ecom/service/user"
 	"github.com/gorilla/mux"
 )
@@ -35,6 +36,10 @@ func (s *APIServer) Run() error {
 	// 创建专门处理用户相关接口的 handler，并注册路由
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subrouter) //把用户相关的路由注册到子路由器上
+
+	productStore := product.NewStore(s.db)             //创建产品存储对象，传入数据库连接
+	productHandler := product.NewHandler(productStore) //假设你有一个产品服务
+	productHandler.RegisterRoutes(subrouter)           //把产品相关的路由注册到子路由器上
 
 	//	启动服务器前，打印一条日志
 	log.Println("listening on", s.addr)

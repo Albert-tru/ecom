@@ -1,0 +1,8 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### 1. 获取所有产品
+GET {{baseUrl}}/api/v1/products
+
+### 2. 测试空数据库（第一次运行时）
+GET {{baseUrl}}/api/v1/products
