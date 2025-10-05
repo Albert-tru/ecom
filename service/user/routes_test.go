@@ -40,18 +40,19 @@ func TestUserServiceHandle(t *testing.T) {
 		// 将请求数据编码为 JSON
 		marshalled, _ := json.Marshal(payload)
 
-		// 创建 HTTP 请求							 请求路径
+		// 创建 HTTP 请求				POST请求	 请求路径
 		req, err := http.NewRequest(http.MethodPost, "/register", bytes.NewReader(marshalled))
+		// req是标准的*http.Request
 
 		if err != nil {
 			t.Fatal(err)
 		}
-		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Content-Type", "application/json") //给请求加上 HTTP 请求头
 
-		rr := httptest.NewRecorder() // 创建响应接收器
+		rr := httptest.NewRecorder() // 创建响应接收器，记录rr.Code
 		router := mux.NewRouter()    // 创建mini路由器
 
-		router.HandleFunc("/register", handler.handleRegister) // 将路径关联到处理函数
+		router.HandleFunc("/register", handler.handleRegister) // 将url关联到处理函数
 		router.ServeHTTP(rr, req)                              // 处理请求
 
 		// 检查响应状态码是否符合预期

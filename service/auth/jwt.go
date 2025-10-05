@@ -111,3 +111,25 @@ func GetUserIDFromContext(ctx context.Context) int {
 
 	return userID
 }
+
+func GetTokenFromRequest(r *http.Request) string {
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		// 尝试从查询参数中获取 token
+		token = r.URL.Query().Get("token")
+	}
+
+	return token
+}
+
+func validateToken(tokenString string) (*jwt.Token, error) {
+	// 解析 token
+	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// 确保使用的是预期的签名方法
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		// 返回用于验证签名的密钥
+		return []byte(config.Envs.JWTSecret), nil
+	})
+}

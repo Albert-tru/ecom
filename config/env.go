@@ -36,6 +36,7 @@ func initConfig() Config {
 		DBName:               getEnv("DB_NAME", "ecom"),
 		DBNet:                getEnv("DB_NET", "tcp"),
 		JWTExpirationSeconds: getEnvInt("JWT_EXP", 3600*24*7), // 24 hours
+		JWTSecret:            getEnv("JWT_SECRET", "your_jwt_secret_key"),
 	}
 }
 
