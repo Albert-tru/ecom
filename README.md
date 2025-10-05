@@ -1,196 +1,312 @@
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/golang-migrate/migrate/ci.yaml?branch=master)](https://github.com/golang-migrate/migrate/actions/workflows/ci.yaml?query=branch%3Amaster)
-[![GoDoc](https://pkg.go.dev/badge/github.com/golang-migrate/migrate)](https://pkg.go.dev/github.com/golang-migrate/migrate/v4)
-[![Coverage Status](https://img.shields.io/coveralls/github/golang-migrate/migrate/master.svg)](https://coveralls.io/github/golang-migrate/migrate?branch=master)
-[![packagecloud.io](https://img.shields.io/badge/deb-packagecloud.io-844fec.svg)](https://packagecloud.io/golang-migrate/migrate?filter=debs)
-[![Docker Pulls](https://img.shields.io/docker/pulls/migrate/migrate.svg)](https://hub.docker.com/r/migrate/migrate/)
-![Supported Go Versions](https://img.shields.io/badge/Go-1.20%2C%201.21-lightgrey.svg)
-[![GitHub Release](https://img.shields.io/github/release/golang-migrate/migrate.svg)](https://github.com/golang-migrate/migrate/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/golang-migrate/migrate/v4)](https://goreportcard.com/report/github.com/golang-migrate/migrate/v4)
+# 🛒 Ecom - 电商后端 API
 
-# migrate
+一个基于 Go 语言开发的电商后端系统，支持用户认证、产品管理、购物车和订单功能。
 
-__Database migrations written in Go. Use as [CLI](#cli-usage) or import as [library](#use-in-your-go-project).__
+## 📚 技术栈
 
-* Migrate reads migrations from [sources](#migration-sources)
-   and applies them in correct order to a [database](#databases).
-* Drivers are "dumb", migrate glues everything together and makes sure the logic is bulletproof.
-   (Keeps the drivers lightweight, too.)
-* Database drivers don't assume things or try to correct user input. When in doubt, fail.
+- **语言**: Go 1.20+
+- **Web 框架**: gorilla/mux
+- **数据库**: MySQL 8.0
+- **认证**: JWT (golang-jwt/jwt)
+- **密码加密**: bcrypt
+- **数据验证**: go-playground/validator
+- **数据库迁移**: golang-migrate
 
-Forked from [mattes/migrate](https://github.com/mattes/migrate)
+## 🚀 功能特性
 
-## Databases
+### ✅ 已实现功能
 
-Database drivers run migrations. [Add a new database?](database/driver.go)
+- **用户管理**
+  - 用户注册
+  - 用户登录
+  - JWT 令牌认证
+  - 密码加密存储
 
-* [PostgreSQL](database/postgres)
-* [PGX v4](database/pgx)
-* [PGX v5](database/pgx/v5)
-* [Redshift](database/redshift)
-* [Ql](database/ql)
-* [Cassandra / ScyllaDB](database/cassandra)
-* [SQLite](database/sqlite)
-* [SQLite3](database/sqlite3) ([todo #165](https://github.com/mattes/migrate/issues/165))
-* [SQLCipher](database/sqlcipher)
-* [MySQL / MariaDB](database/mysql)
-* [Neo4j](database/neo4j)
-* [MongoDB](database/mongodb)
-* [CrateDB](database/crate) ([todo #170](https://github.com/mattes/migrate/issues/170))
-* [Shell](database/shell) ([todo #171](https://github.com/mattes/migrate/issues/171))
-* [Google Cloud Spanner](database/spanner)
-* [CockroachDB](database/cockroachdb)
-* [YugabyteDB](database/yugabytedb)
-* [ClickHouse](database/clickhouse)
-* [Firebird](database/firebird)
-* [MS SQL Server](database/sqlserver)
-* [RQLite](database/rqlite)
+- **产品管理**
+  - 获取产品列表
+  - 根据 ID 批量查询产品
 
-### Database URLs
+- **购物车 & 订单**
+  - 购物车结账
+  - 创建订单
+  - 创建订单项
+  - 库存检查
+  - 价格计算
 
-Database connection strings are specified via URLs. The URL format is driver dependent but generally has the form: `dbdriver://username:password@host:port/dbname?param1=true&param2=false`
+### 🚧 待开发功能
 
-Any [reserved URL characters](https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_reserved_characters) need to be escaped. Note, the `%` character also [needs to be escaped](https://en.wikipedia.org/wiki/Percent-encoding#Percent-encoding_the_percent_character)
+- [ ] 产品 CRUD（创建/更新/删除）
+- [ ] 订单查询
+- [ ] 用户个人信息管理
+- [ ] 库存自动更新
+- [ ] 订单状态管理
+- [ ] 支付集成
 
-Explicitly, the following characters need to be escaped:
-`!`, `#`, `$`, `%`, `&`, `'`, `(`, `)`, `*`, `+`, `,`, `/`, `:`, `;`, `=`, `?`, `@`, `[`, `]`
+## 📁 项目结构
 
-It's easiest to always run the URL parts of your DB connection URL (e.g. username, password, etc) through an URL encoder. See the example Python snippets below:
-
-```bash
-$ python3 -c 'import urllib.parse; print(urllib.parse.quote(input("String to encode: "), ""))'
-String to encode: FAKEpassword!#$%&'()*+,/:;=?@[]
-FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$ python2 -c 'import urllib; print urllib.quote(raw_input("String to encode: "), "")'
-String to encode: FAKEpassword!#$%&'()*+,/:;=?@[]
-FAKEpassword%21%23%24%25%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D
-$
+```
+ecom/
+├── cmd/
+│   ├── main.go              # 应用入口
+│   ├── api/
+│   │   └── api.go          # API 服务器
+│   └── migrate/
+│       ├── main.go         # 数据库迁移入口
+│       └── migrations/     # 迁移文件
+├── config/
+│   └── env.go              # 环境配置
+├── db/
+│   └── db.go               # 数据库连接
+├── service/
+│   ├── auth/               # 认证服务
+│   │   ├── jwt.go         # JWT 实现
+│   │   └── password.go    # 密码哈希
+│   ├── user/               # 用户服务
+│   │   ├── routes.go      # 用户路由
+│   │   └── store.go       # 用户数据层
+│   ├── product/            # 产品服务
+│   │   ├── routes.go      # 产品路由
+│   │   └── store.go       # 产品数据层
+│   ├── cart/               # 购物车服务
+│   │   ├── routes.go      # 购物车路由
+│   │   └── service.go     # 购物车业务逻辑
+│   └── order/              # 订单服务
+│       └── store.go        # 订单数据层
+├── types/
+│   └── types.go            # 数据类型定义
+├── utils/
+│   └── utils.go            # 工具函数
+├── .env                    # 环境变量
+├── Makefile                # 构建脚本
+└── *.http                  # REST Client 测试文件
 ```
 
-## Migration Sources
+## �� 安装与运行
 
-Source drivers read migrations from local or remote sources. [Add a new source?](source/driver.go)
-
-* [Filesystem](source/file) - read from filesystem
-* [io/fs](source/iofs) - read from a Go [io/fs](https://pkg.go.dev/io/fs#FS)
-* [Go-Bindata](source/go_bindata) - read from embedded binary data ([jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata))
-* [pkger](source/pkger) - read from embedded binary data ([markbates/pkger](https://github.com/markbates/pkger))
-* [GitHub](source/github) - read from remote GitHub repositories
-* [GitHub Enterprise](source/github_ee) - read from remote GitHub Enterprise repositories
-* [Bitbucket](source/bitbucket) - read from remote Bitbucket repositories
-* [Gitlab](source/gitlab) - read from remote Gitlab repositories
-* [AWS S3](source/aws_s3) - read from Amazon Web Services S3
-* [Google Cloud Storage](source/google_cloud_storage) - read from Google Cloud Platform Storage
-
-## CLI usage
-
-* Simple wrapper around this library.
-* Handles ctrl+c (SIGINT) gracefully.
-* No config search paths, no config files, no magic ENV var injections.
-
-__[CLI Documentation](cmd/migrate)__
-
-### Basic usage
+### 1. 克隆项目
 
 ```bash
-$ migrate -source file://path/to/migrations -database postgres://localhost:5432/database up 2
+git clone <your-repo-url>
+cd ecom
 ```
 
-### Docker usage
+### 2. 配置环境变量
+
+创建 `.env` 文件：
+
+```env
+# 数据库配置
+DB_USER=ecomuser
+DB_PASSWORD=Ecom123.
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=ecom
+DB_NET=tcp
+
+# JWT 配置
+JWT_SECRET=your_jwt_secret_key
+JWT_EXP=604800
+
+# 服务器配置
+PUBLIC_HOST=http://localhost
+PORT=8080
+```
+
+### 3. 创建数据库
 
 ```bash
-$ docker run -v {{ migration dir }}:/migrations --network host migrate/migrate
-    -path=/migrations/ -database postgres://localhost:5432/database up 2
+mysql -u root -p
 ```
 
-## Use in your Go project
+```sql
+CREATE DATABASE ecom;
+CREATE USER 'ecomuser'@'localhost' IDENTIFIED BY 'Ecom123.';
+GRANT ALL PRIVILEGES ON ecom.* TO 'ecomuser'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-* API is stable and frozen for this release (v3 & v4).
-* Uses [Go modules](https://golang.org/cmd/go/#hdr-Modules__module_versions__and_more) to manage dependencies.
-* To help prevent database corruptions, it supports graceful stops via `GracefulStop chan bool`.
-* Bring your own logger.
-* Uses `io.Reader` streams internally for low memory overhead.
-* Thread-safe and no goroutine leaks.
+### 4. 执行数据库迁移
 
-__[Go Documentation](https://pkg.go.dev/github.com/golang-migrate/migrate/v4)__
+```bash
+make migrate-up
+```
 
-```go
-import (
-    "github.com/golang-migrate/migrate/v4"
-    _ "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/github"
-)
+### 5. 运行服务器
 
-func main() {
-    m, err := migrate.New(
-        "github://mattes:personal-access-token@mattes/migrate_test",
-        "postgres://localhost:5432/database?sslmode=enable")
-    m.Steps(2)
+```bash
+make run
+```
+
+服务器将在 `http://localhost:8080` 启动。
+
+## 📝 API 文档
+
+### 用户认证
+
+#### 注册用户
+
+```http
+POST /api/v1/register
+Content-Type: application/json
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@example.com",
+  "password": "123456"
 }
 ```
 
-Want to use an existing database client?
+#### 用户登录
 
-```go
-import (
-    "database/sql"
-    _ "github.com/lib/pq"
-    "github.com/golang-migrate/migrate/v4"
-    "github.com/golang-migrate/migrate/v4/database/postgres"
-    _ "github.com/golang-migrate/migrate/v4/source/file"
-)
+```http
+POST /api/v1/login
+Content-Type: application/json
 
-func main() {
-    db, err := sql.Open("postgres", "postgres://localhost:5432/database?sslmode=enable")
-    driver, err := postgres.WithInstance(db, &postgres.Config{})
-    m, err := migrate.NewWithDatabaseInstance(
-        "file:///migrations",
-        "postgres", driver)
-    m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
+{
+  "email": "john@example.com",
+  "password": "123456"
 }
 ```
 
-## Getting started
-
-Go to [getting started](GETTING_STARTED.md)
-
-## Tutorials
-
-* [CockroachDB](database/cockroachdb/TUTORIAL.md)
-* [PostgreSQL](database/postgres/TUTORIAL.md)
-
-(more tutorials to come)
-
-## Migration files
-
-Each migration has an up and down migration. [Why?](FAQ.md#why-two-separate-files-up-and-down-for-a-migration)
-
-```bash
-1481574547_create_users_table.up.sql
-1481574547_create_users_table.down.sql
+**响应：**
+```json
+{
+  "message": "login successful",
+  "user_id": "1",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
 ```
 
-[Best practices: How to write migrations.](MIGRATIONS.md)
+### 产品管理
 
-## Coming from another db migration tool?
+#### 获取产品列表
 
-Check out [migradaptor](https://github.com/musinit/migradaptor/).
-*Note: migradaptor is not affliated or supported by this project*
+```http
+GET /api/v1/products
+```
 
-## Versions
+### 购物车 & 订单
 
-Version | Supported? | Import | Notes
---------|------------|--------|------
-**master** | :white_check_mark: | `import "github.com/golang-migrate/migrate/v4"` | New features and bug fixes arrive here first |
-**v4** | :white_check_mark: | `import "github.com/golang-migrate/migrate/v4"` | Used for stable releases |
-**v3** | :x: | `import "github.com/golang-migrate/migrate"` (with package manager) or `import "gopkg.in/golang-migrate/migrate.v3"` (not recommended) | **DO NOT USE** - No longer supported |
+#### 购物车结账
 
-## Development and Contributing
+```http
+POST /api/v1/cart/checkout
+Content-Type: application/json
+Authorization: Bearer <your_token>
 
-Yes, please! [`Makefile`](Makefile) is your friend,
-read the [development guide](CONTRIBUTING.md).
+{
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 2
+    },
+    {
+      "productId": 2,
+      "quantity": 1
+    }
+  ]
+}
+```
 
-Also have a look at the [FAQ](FAQ.md).
+**响应：**
+```json
+{
+  "status": "success",
+  "orderId": 1,
+  "totalPrice": 2299.97
+}
+```
+
+## 🧪 测试
+
+项目包含 REST Client 测试文件，可在 VS Code 中使用 REST Client 扩展进行测试：
+
+- `log-api-test.http` - 用户认证测试
+- `product-api-test.http` - 产品 API 测试
+- `cart-api-test.http` - 购物车 API 测试
+
+## 🛠️ 开发命令
+
+```bash
+# 编译项目
+make build
+
+# 运行项目
+make run
+
+# 运行测试
+make test
+
+# 创建迁移文件
+make migration name=<migration_name>
+
+# 执行迁移（向上）
+make migrate-up
+
+# 回滚迁移（向下）
+make migrate-down
+```
+
+## 📊 数据库表结构
+
+### users 表
+- id (主键)
+- firstname
+- lastname
+- email (唯一)
+- password (bcrypt 哈希)
+- createdat
+
+### products 表
+- id (主键)
+- name
+- description
+- image
+- price
+- quantity
+- createdat
+
+### orders 表
+- id (主键)
+- user_id (外键)
+- total
+- status
+- address
+- created_at
+
+### order_items 表
+- id (主键)
+- order_id (外键)
+- product_id (外键)
+- quantity
+- price
+
+## 📖 学习笔记
+
+这个项目实践了以下 Go 语言开发技能：
+
+- ✅ RESTful API 设计
+- ✅ JWT 认证实现
+- ✅ 数据库操作 (database/sql)
+- ✅ 中间件模式
+- ✅ MVC 架构
+- ✅ 错误处理
+- ✅ 数据验证
+- ✅ 测试驱动开发（TDD）
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT License
+
+## 👨‍�� 作者
+
+Albert - 正在学习 Go 语言开发
 
 ---
 
-Looking for alternatives? [https://awesome-go.com/#database](https://awesome-go.com/#database).
+**⭐ 如果这个项目对你有帮助，请给个 Star！**
